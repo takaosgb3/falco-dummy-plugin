@@ -33,6 +33,12 @@ jobs:
             -v $(pwd)/dummy_rules.yaml:/etc/falco/rules/dummy_rules.yaml \
             -v $(pwd)/falco.yaml:/etc/falco/falco.yaml \
             falcosecurity/falco:latest falco -c /etc/falco/falco.yaml -r /etc/falco/rules/dummy_rules.yaml --disable-source=syscall | tee falco.log
+      
+      - name: Upload libdummy.so
+        uses: actions/upload-artifact@v4
+        with:
+          name: libdummy.so
+          path: libdummy.so
 
       - name: Check for detection
         run: |
@@ -43,8 +49,3 @@ jobs:
             exit 1
           fi
 
-      - name: Upload libdummy.so
-        uses: actions/upload-artifact@v4
-        with:
-          name: libdummy.so
-          path: libdummy.so
