@@ -1,0 +1,10 @@
+plugins:
+  - name: dummy
+    library_path: /usr/share/falco/plugins/libdummy.so
+    init_config: '{"jitter": 0}'
+    open_params: '{"start": 1, "maxEvents": 5}'
+
+load_plugins: [dummy]
+
+stdout_output:
+  enabled: true

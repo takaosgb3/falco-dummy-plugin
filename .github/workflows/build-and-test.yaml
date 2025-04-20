@@ -1,0 +1,45 @@
+name: Build and Test Dummy Plugin
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Build libdummy.so
+        run: |
+          go build -buildmode=c-shared -o libdummy.so ./plugin
+
+      - name: Run Falco with plugin
+        run: |
+          docker run --rm -t \
+            --platform=linux/amd64 \
+            --privileged \
+            -v $(pwd)/libdummy.so:/usr/share/falco/plugins/libdummy.so \
+            -v $(pwd)/dummy_rules.yaml:/etc/falco/rules/dummy_rules.yaml \
+            -v $(pwd)/falco.yaml:/etc/falco/falco.yaml \
+            falcosecurity/falco:latest \
+            falco -c /etc/falco/falco.yaml -r /etc/falco/rules/dummy_rules.yaml --disable-source=syscall | tee falco.log
+
+      - name: Check for detection
+        run: |
+          if grep -q "Dummy event says:" falco.log; then
+            echo "✅ Detected dummy event"
+          else
+            echo "❌ Dummy event not detected"
+            exit 1
+          fi
