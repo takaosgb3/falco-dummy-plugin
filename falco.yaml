@@ -5,6 +5,9 @@ plugins:
     open_params: '{"start": 1, "maxEvents": 5}'
 
 load_plugins: [dummy]
+load_syscall_source: false
+syscall_event_drops:
+  enabled: false
 
 stdout_output:
   enabled: true

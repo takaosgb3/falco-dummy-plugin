@@ -42,3 +42,9 @@ jobs:
             echo "❌ Dummy event not detected"
             exit 1
           fi
+
+      - name: Upload libdummy.so
+        uses: actions/upload-artifact@v4
+        with:
+          name: libdummy.so
+          path: libdummy.so

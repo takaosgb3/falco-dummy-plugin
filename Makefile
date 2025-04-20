@@ -35,5 +35,3 @@ $(OUTPUT):
 readme:
 	@$(READMETOOL) -p ./$(OUTPUT) -f README.md
 
-build-linux:
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=1 $(GO) build -buildmode=c-shared -o $(OUTPUT) ./plugin
