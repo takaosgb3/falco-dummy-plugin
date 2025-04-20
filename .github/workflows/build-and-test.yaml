@@ -33,7 +33,10 @@ jobs:
             -v $(pwd)/dummy_rules.yaml:/etc/falco/rules/dummy_rules.yaml \
             -v $(pwd)/falco.yaml:/etc/falco/falco.yaml \
             falcosecurity/falco:latest \
-            falco -c /etc/falco/falco.yaml -r /etc/falco/rules/dummy_rules.yaml --disable-source=syscall | tee falco.log
+            falco -c /etc/falco/falco.yaml \
+            -r /etc/falco/rules/dummy_rules.yaml \
+            -c /etc/falco/falco.yaml \
+            --disable-source=syscall | tee falco.log
 
       - name: Check for detection
         run: |
